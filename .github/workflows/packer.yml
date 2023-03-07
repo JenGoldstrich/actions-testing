@@ -20,7 +20,7 @@ jobs:
       - name: Run `packer validate`
         id: validate
         run: "packer validate ./packer_templates/hello-world.pkr.hcl"
-      - name: Build Artifact
+      - name: Build Artifact and push to HCP Packer
         run: packer build -color=false -on-error=abort ./packer_templates/hello-world.pkr.hcl
         env:
           HCP_CLIENT_ID: ${{ secrets.HCP_CLIENT_ID }}
