@@ -19,9 +19,9 @@ jobs:
         run: "packer init ./packer_templates/hello-world.pkr.hcl"
       - name: Run `packer validate`
         id: validate
-        run: "packer validate ./packer-templates/hello_world.pkr.hcl"
+        run: "packer validate ./packer_templates/hello_world.pkr.hcl"
       - name: Build Artifact
-        run: packer build -color=false -on-error=abort ./packer-templates/hello_world.pkr.hcl
+        run: packer build -color=false -on-error=abort ./packer_templates/hello_world.pkr.hcl
         env:
           HCP_CLIENT_ID: ${{ secrets.HCP_CLIENT_ID }}
           HCP_CLIENT_SECRET: ${{ secrets.HCP_CLIENT_SECRET }}
