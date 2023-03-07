@@ -19,7 +19,7 @@ Some nice description about the image which artifact is being published to HCP P
 
     labels = {
       "foo-version" = "3.4.0",
-      "foo" = "bar",
+      "foo" = "bar", 
     }
   }
 
