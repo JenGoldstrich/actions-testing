@@ -1,68 +1,27 @@
-name: test
-
+hcp-packer
 on:
-  push:
-
+  - push
 jobs:
-  setup-packer:
-    env:
-      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+hcp-packer
     runs-on: ubuntu-latest
-    name: Test setup-packer
+    name: Run Packer
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      
-      - name: Setup `packer` from renamed action
-        uses: hashicorp/packer-github-actions@${{ github.head_ref || github.ref_name }}
+      - name: Setup `packer`
+        uses: hashicorp/setup-packer@main
         id: setup
         with:
-          version: "1.8.1"
-          
-      - name: Print `$PATH`
-        run: which packer
-
-      - name: Print packer version
-        run: packer version
-
-      - name: Validate Packer version is latest (1.8.1)
-        run: if packer version | grep -q "Packer v1.8.1"; then echo "passed"; else exit 1; fi;
-
-      - name: Run `packer` init
-        run: packer init "${{ github.action_path }}./test/hello-world.pkr.hcl"
-
-      - name: Try to setup packer for an invalid verison
-        uses: hashicorp/packer-github-actions@rewrite-to-typescript
-        id: ranch
-        with:
-          version: "ranch"
-        continue-on-error: true
-
-      - name: Validate invalid version failed
-        if: steps.ranch.outcome == 'success'
-        run: echo "Installing an invalid version expected to fail but did not" && exit 1
-
-      - name: Try to setup packer for a verison that has yet to be released
-        uses: hashicorp/packer-github-actions@rewrite-to-typescript
-        id: packer3
-        with:
-          version: "3.0.0"
-        continue-on-error: true
-
-      - name: Validate invalid version failed
-        if: steps.packer3.outcome == 'success'
-        run: echo "Installing a non existant expected to fail but did not" && exit 1
-
-      - name: No version defaults to latest
-        uses: hashicorp/packer-github-actions@rewrite-to-typescript
-        id: latest
-
-     ## TODO, don't hardcode version
-      - name: Validate Packer version is latest (currently hardcoded, need to refactor)
-        run: if packer version | grep -q "Packer v1.8.4"; then echo "passed"; else exit 1; fi;
-
-      - name: Print packer version
-        run: packer version
-
-      - name: Run `packer` init
-        run: packer init "${{ github.action_path }}./test/hello-world.pkr.hcl"
+          version: "latest"
+      - name: Run `packer init`
+        id: init
+        run: "packer init ./packer-templates/hello-world.pkr.hcl"
+      - name: Run `packer validate`
+        id: validate
+        run: "packer validate ./packer-templates/hello-world.pkr.hcl"
+      - name: Build Artifact
+        run: packer build -color=false -on-error=abort ./packer-templates/hello-world.pkr.hcl
+        env:
+          HCP_CLIENT_ID: ${{ secrets.HCP_CLIENT_ID }}
+          HCP_CLIENT_SECRET: ${{ secrets.HCP_CLIENT_SECRET }}
+          HCP_PACKER_BUILD_FINGERPRINT: ${{ github.run_id }}
