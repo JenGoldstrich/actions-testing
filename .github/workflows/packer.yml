@@ -12,7 +12,7 @@ hcp-packer
         uses: hashicorp/setup-packer@main
         id: setup
         with:
-          version: "latest"
+          version: "latest" 
       - name: Run `packer init`
         id: init
         run: "packer init ./packer-templates/hello-world.pkr.hcl"
