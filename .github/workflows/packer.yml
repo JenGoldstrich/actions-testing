@@ -1,4 +1,5 @@
-hcp-packer
+name: hcp-packer
+
 on:
   - push
 jobs:
