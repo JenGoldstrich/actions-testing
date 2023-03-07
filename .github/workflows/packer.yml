@@ -3,7 +3,7 @@ name: hcp-packer
 on:
   - push
 jobs:
-hcp-packer
+  hcp-packer:
     runs-on: ubuntu-latest
     name: Run Packer
     steps:
