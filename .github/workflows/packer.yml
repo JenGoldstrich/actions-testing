@@ -25,4 +25,4 @@ jobs:
         env:
           HCP_CLIENT_ID: ${{ secrets.HCP_CLIENT_ID }}
           HCP_CLIENT_SECRET: ${{ secrets.HCP_CLIENT_SECRET }}
-          HCP_PACKER_BUILD_FINGERPRINT: ${{ github.run_id }} and ${{github.run_attempt}}
+          HCP_PACKER_BUILD_FINGERPRINT: run.id.${{ github.run_id }}run.attempt.${{github.run_attempt}}
