@@ -14,6 +14,7 @@ jobs:
         id: setup
         with:
           version: "latest" 
+          
       - name: Run `packer init`
         id: init
         run: "packer init ./packer_templates/hello-world.pkr.hcl"
